@@ -6,7 +6,7 @@ COPY gradle $APP_HOME/gradle
 RUN chmod +x gradlew
 RUN ./gradlew build || return 0
 COPY src $APP_HOME/src
-RUN ./gradlew clean compileQuerydsl
+RUN ./gradlew compileQuerydsl
 RUN ./gradlew clean build -x test
 
 FROM adoptopenjdk/openjdk11

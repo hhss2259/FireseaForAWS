@@ -3,7 +3,7 @@ import { configureStore, createSlice } from "@reduxjs/toolkit";
 let ip = createSlice({
     name: 'ip',
     //initialState: 'firesea.o-r.kr:8080',
-    initialState: 'localhost:8080'
+    initialState: 'firesea.o-r.kr:8080'
     // initialState: '192.168.0.6:8080'
 })
 let loginInfo = createSlice({
