@@ -11,6 +11,11 @@ class TestServerApplicationTests {
 
 	@Test
 	void contextLoads() {
+		int n = 2;
+		for (int i = 1; i < n; ) {
+
+		}
+
 	}
 
 }

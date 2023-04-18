@@ -15,5 +15,10 @@ public class ApiTestController {
         return "hello firesea";
     }
 
+    @GetMapping("/api/ssafy")
+    public String ssafy() {
+
+        return "[ssafy] check the console";
+    }
 
 }

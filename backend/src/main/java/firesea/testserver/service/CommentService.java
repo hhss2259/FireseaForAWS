@@ -53,4 +53,8 @@ public class CommentService {
 
     }
 
+    public PageCustomDto<CommentDetailDto> updateComment(int commentId, String username, String commentBody) {
+ return null;
+
+    }
 }

@@ -37,6 +37,7 @@ public class TextMessageController {
 
     @Getter
     @AllArgsConstructor
+    @NoArgsConstructor
     static class TextMessageDto {
         String textTitle;
         String textBody;

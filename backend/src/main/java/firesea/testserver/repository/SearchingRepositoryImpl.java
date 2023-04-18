@@ -12,11 +12,12 @@ import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-
 import java.util.List;
 
 import static firesea.testserver.domain.entity.QMember.*;
+import static firesea.testserver.domain.entity.QMember.member;
 import static firesea.testserver.domain.entity.QTextMessage.*;
+import static firesea.testserver.domain.entity.QTextMessage.textMessage;
 
 @Slf4j
 @Repository
@@ -57,7 +58,10 @@ public class SearchingRepositoryImpl {
     private BooleanExpression checkContent(String content) {
 
 //        String[] words = content.split(" ");
-        String[] words = content.split("[^\uAC00-\uD7A3xfe0-9a-zA-Z)]");
+        String[] words = content.split("[`~!@#$%^&*()_|+\\-=?;:'\",.<>\\{\\}\\[\\]\\\\\\/ ]");
+        for (String word : words) {
+            log.info("[searching repository ]word = {}", word);
+        }
 
         BooleanExpression contains = textMessage.textTitle.concat(textMessage.textBody).contains(words[0]);
         log.info("words[0]={}", words[0]);

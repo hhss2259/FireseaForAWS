@@ -3,9 +3,11 @@ package firesea.testserver.controller.api;
 import firesea.testserver.domain.CommentDetailDto;
 import firesea.testserver.domain.basic.DefaultRes;
 import firesea.testserver.domain.basic.PageCustomDto;
+import firesea.testserver.domain.entity.Comment;
 import firesea.testserver.service.CommentService;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -45,5 +47,19 @@ public class CommentController {
         return DefaultRes.res(20023, id + "번 글의 댓글 리스트" ,list);
     }
 
+    @PatchMapping("/api/user/comment/update")
+    public DefaultRes<PageCustomDto<CommentDetailDto>> updateComment(HttpServletRequest request, @RequestBody UpdatedComment dto) {
+        String username = (String) request.getAttribute("username");
+        PageCustomDto<CommentDetailDto> list = commentService.updateComment(dto.getCommentId(), username, dto.getCommentBody());
+        return DefaultRes.res(20023, 1 + "번 글의 댓글 리스트" ,list);
+    }
 
+    @RequiredArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    static class UpdatedComment{
+        int commentId;
+        int textMessageId;
+        String commentBody;
+    }
 }

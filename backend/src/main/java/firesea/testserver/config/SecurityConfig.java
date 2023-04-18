@@ -14,7 +14,7 @@ import org.springframework.web.filter.CorsFilter;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final CorsFilter corsFilter;
+//    private final CorsFilter corsFilter;
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http)throws Exception{
         //csrf 공격 방지
@@ -23,8 +23,8 @@ public class SecurityConfig {
         //session 방식 사용하지 않음
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-        //cors 에러 해결
-        http.addFilter(corsFilter);
+        //cors 에러 해결 = > 다른 방식으로 해결했음
+//        http.addFilter(corsFilter);
 
         //우선 모든 요청에 대해 허용 중
         http.authorizeRequests()

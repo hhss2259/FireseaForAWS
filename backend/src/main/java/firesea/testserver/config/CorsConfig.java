@@ -6,11 +6,11 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
-@Configuration
+//@Configuration
 public class CorsConfig {
     // 인증이 필요하지 않은 요청만 허용한다면, @CrossOrigin 으로 해결 가능
     // But! 인증이 필요한 요청까지 허용하려면, 필터를 직접 설정해주어야 한다.
-    @Bean
+//    @Bean
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();

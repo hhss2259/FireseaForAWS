@@ -50,6 +50,9 @@ dependencies {
 	//jwt 토큰
 	implementation("com.auth0:java-jwt:4.2.0")
 
+	// https://mvnrepository.com/artifact/javax.validation/validation-api
+	implementation("javax.validation:validation-api:2.0.1.Final")
+
 
 }
 

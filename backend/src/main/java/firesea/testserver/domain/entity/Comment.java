@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.w3c.dom.Text;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Slf4j
@@ -22,12 +23,15 @@ public class Comment extends JpaBaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "username")
+    @NotNull
     Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tmId")
+    @JoinColumn(name = "tmId" ,updatable = false)
+    @NotNull
     TextMessage textMessage;
 
+    @NotNull
     String commentBody;
 
     public Comment(Member member, TextMessage tm, String commentBody) {
