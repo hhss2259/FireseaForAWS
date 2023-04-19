@@ -89,5 +89,10 @@ public class TextMessage extends JpaBaseTimeEntity {
     public void increaseCommentCnt() {
         this.commentCnt++;
     }
+
+    public void deleteComment(Comment comment) {
+        this.commentCnt--;
+        comment.deleteComment();
+    }
 }
 

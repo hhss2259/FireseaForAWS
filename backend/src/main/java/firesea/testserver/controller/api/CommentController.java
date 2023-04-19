@@ -5,16 +5,14 @@ import firesea.testserver.domain.basic.DefaultRes;
 import firesea.testserver.domain.basic.PageCustomDto;
 import firesea.testserver.domain.entity.Comment;
 import firesea.testserver.service.CommentService;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @Slf4j
 @RestController
@@ -48,18 +46,30 @@ public class CommentController {
     }
 
     @PatchMapping("/api/user/comment/update")
-    public DefaultRes<PageCustomDto<CommentDetailDto>> updateComment(HttpServletRequest request, @RequestBody UpdatedComment dto) {
+    public DefaultRes updateComment(HttpServletRequest request, @RequestBody UpdatedComment dto) {
         String username = (String) request.getAttribute("username");
-        PageCustomDto<CommentDetailDto> list = commentService.updateComment(dto.getCommentId(), username, dto.getCommentBody());
-        return DefaultRes.res(20023, 1 + "번 글의 댓글 리스트" ,list);
+        commentService.updateComment(dto.getCommentId(), dto.getCommentBody());
+        return DefaultRes.res(20026, "번 글의 댓글을 수정하였습니다");
     }
 
-    @RequiredArgsConstructor
+    @DeleteMapping("/api/user/comment/delete")
+    public DefaultRes deleteComment(HttpServletRequest request, HttpServletRequest httpServletRequest, @RequestBody UpdatedComment dto) {
+        String username = (String) request.getAttribute("username");
+
+        log.info("content type = {}", httpServletRequest.getContentType());
+        log.info("strign = {}" , dto.getCommentId());
+        commentService.deleteComment(dto.getCommentId());
+        return DefaultRes.res(20027, "번 글의 댓글을 삭제하였습니다");
+    }
+
+
+
+
     @NoArgsConstructor
+    @AllArgsConstructor
     @Getter
     static class UpdatedComment{
         int commentId;
-        int textMessageId;
         String commentBody;
     }
 }

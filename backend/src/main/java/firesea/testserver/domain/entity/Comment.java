@@ -10,6 +10,7 @@ import org.w3c.dom.Text;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 @Entity
 @Slf4j
@@ -34,9 +35,23 @@ public class Comment extends JpaBaseTimeEntity {
     @NotNull
     String commentBody;
 
+    Boolean deleteTrue = false;
+    LocalDateTime deleteTime = null;
+
     public Comment(Member member, TextMessage tm, String commentBody) {
         this.member = member;
         this.textMessage = tm;
         this.commentBody = commentBody;
+        this.deleteTrue = false ;
+        this.deleteTime = null;
+    }
+
+    public void updateCommentBody(String commentBody) {
+        this.commentBody = commentBody;
+    }
+
+    public void deleteComment() {
+        this.deleteTrue = true;
+        this.deleteTime = LocalDateTime.now();;
     }
 }

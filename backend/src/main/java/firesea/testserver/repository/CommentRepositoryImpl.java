@@ -33,7 +33,10 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom {
                 )
                 .from(comment)
                 .join(comment.member, member)
-                .where(comment.textMessage.eq(textMessage))
+                .where(
+                        comment.textMessage.eq(textMessage),
+                        comment.deleteTrue.eq(false)
+                )
                 .orderBy(comment.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -42,7 +45,10 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom {
         JPAQuery<Long> countQuery = queryFactory
                 .select(comment.count())
                 .from(comment)
-                .where(comment.textMessage.eq(textMessage));
+                .where(
+                        comment.textMessage.eq(textMessage),
+                        comment.deleteTrue.eq(false)
+                );
 
         return PageableExecutionUtils.getPage(list, pageable, countQuery::fetchOne);
     }

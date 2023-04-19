@@ -52,9 +52,18 @@ public class CommentService {
 
 
     }
+    @Transactional
+    public void updateComment(int commentId, String commentBody) {
 
-    public PageCustomDto<CommentDetailDto> updateComment(int commentId, String username, String commentBody) {
- return null;
+        Comment comment = commentRepository.findById(commentId).get();
+        comment.updateCommentBody(commentBody);
+
+    }
+    @Transactional
+    public void deleteComment(int commentId) {
+        Comment comment = commentRepository.findById(commentId).get();
+        TextMessage textMessage = comment.getTextMessage();
+        textMessage.deleteComment(comment);
 
     }
 }
