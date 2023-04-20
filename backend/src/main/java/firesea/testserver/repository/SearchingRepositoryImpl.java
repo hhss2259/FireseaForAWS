@@ -106,7 +106,7 @@ public class SearchingRepositoryImpl {
     private BooleanExpression checkNickname(String content) {
 
 //        String[] words = content.split(" ");
-        String[] words = content.split("[^\uAC00-\uD7A3xfe0-9a-zA-Z)]");
+        String[] words = content.split("[`~!@#$%^&*()_|+\\-=?;:'\",.<>\\{\\}\\[\\]\\\\\\/ ]");
 
         BooleanExpression contains = member.nickname.contains(words[0]);
         log.info("words[0]={}", words[0]);
