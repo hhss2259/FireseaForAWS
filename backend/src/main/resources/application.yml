@@ -11,3 +11,5 @@ spring:
         - db-docker-local
     include:
       - db
+server:
+  port: 8081
