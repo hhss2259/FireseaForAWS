@@ -38,4 +38,5 @@ out/
 
 
 application-db.yml
+email.yml
 src/main/java/firesea/testserver/jwt/JwtConstants.java

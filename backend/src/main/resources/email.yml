@@ -1,0 +1,15 @@
+spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: hhss2259@gmail.com
+    password: @#Eddy85860904
+    smtp:
+      auth: true
+      starttls:
+        enable: true
+    transport:
+      protocol: smtp
+    debug: true
+    default:
+      encoding: UTF-8
