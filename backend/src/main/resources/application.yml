@@ -1,7 +1,7 @@
 spring:
   profiles:
     active:
-      - prod
+      - local
     group:
       local:
         - db-local
@@ -12,4 +12,4 @@ spring:
     include:
       - db
 server:
-  port: 8081
+  port: 8080

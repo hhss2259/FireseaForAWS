@@ -12,4 +12,6 @@ public interface MemberRepositoryCustom {
     int findCnt(String username);
 
     Page<UserTextMessageTitleDto> getUserTmList(String username, Pageable pageable);
+
+    String getNicknameByUsername(String username);
 }

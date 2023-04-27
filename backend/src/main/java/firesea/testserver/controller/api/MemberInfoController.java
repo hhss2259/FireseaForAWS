@@ -58,6 +58,7 @@ public class MemberInfoController {
         String username = (String) optionalMap.get().get("username");
         String nickname = (String) optionalMap.get().get("nickname");
 
+
         String accessToken = jwtFactory.makeAT(username, nickname);//access token 생성
         response.addHeader(AT_HEADER, TOKEN_HEADER_PREFIX + accessToken); //응답 헤더에 access token 추가
 
@@ -66,14 +67,17 @@ public class MemberInfoController {
 
         tokenService.updateRefreshTokens(username, refreshToken);//refresh token member db에 저장
 
-        // cookie에 한 번 담아보자
-        Cookie cookie = new Cookie("refresh_token", refreshToken);
-        cookie.setMaxAge(7 * 24 * 60 * 60);
 
-//        cookie.setSecure(true);
-//        cookie.setHttpOnly(true);
-        cookie.setPath("/");
-        response.addCookie(cookie);
+
+
+//        // cookie에 한 번 담아보자
+//        Cookie cookie = new Cookie("refresh_token", refreshToken);
+//        cookie.setMaxAge(7 * 24 * 60 * 60);
+//
+////        cookie.setSecure(true);
+////        cookie.setHttpOnly(true);
+//        cookie.setPath("/");
+//        response.addCookie(cookie);
 
 
         DefaultRes defaultRes = DefaultRes.res(20002, "로그인 성공", nickname);

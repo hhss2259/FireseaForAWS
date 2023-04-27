@@ -1,5 +1,7 @@
 package firesea.testserver.mail;
 
+import firesea.testserver.domain.entity.Member;
+import firesea.testserver.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.MailException;
@@ -8,6 +10,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import javax.mail.Message;
 import javax.mail.internet.InternetAddress;
@@ -23,6 +26,8 @@ import java.util.Random;
 public class EmailService {
 
     private final JavaMailSender javaMailSender;
+    private final MemberRepository memberRepository;
+
     private Map createMessage(String to)throws Exception{
         MimeMessage message = javaMailSender.createMimeMessage();
         String key = createKey();
@@ -85,8 +90,17 @@ public class EmailService {
             javaMailSender.send((MimeMessage) map.get("message"));
         } catch (MailException es) {
             es.printStackTrace();
-            throw new IllegalAccessException();
+            throw new IllegalEmailException();
         }
         return (String) map.get("key");
     }
+
+    public void checkDuplicateEmail(String email) {
+        Member member = memberRepository.findMemberByEmail(email);
+
+        if (member == null) {
+            throw new DuplicateEmailException();
+        }
+    }
+
 }

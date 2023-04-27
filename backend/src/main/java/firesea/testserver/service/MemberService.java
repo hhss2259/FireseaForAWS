@@ -80,4 +80,9 @@ public class MemberService {
     public int getTmCnt(String username) {
         return memberRepository.findCnt(username);
     }
+
+    public String getNickname(String username) {
+        return  memberRepository.getNicknameByUsername(username);
+    }
+
 }

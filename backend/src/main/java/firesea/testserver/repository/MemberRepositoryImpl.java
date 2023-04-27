@@ -70,4 +70,15 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
 
         return new PageImpl<UserTextMessageTitleDto>(list, pageable, cnt);
     }
+
+    @Override
+    public String getNicknameByUsername(String username) {
+        String nickname = queryFactory
+                .select(member.nickname.as("nickname"))
+                .from(member)
+                .where(member.username.eq(username))
+                .fetchOne();
+
+        return  nickname;
+    }
 }
