@@ -16,7 +16,6 @@ import static firesea.testserver.jwt.JwtConstants.*;
 @RequiredArgsConstructor
 public class JwtFactory {
 
-    private final TokenService tokenService;
 
     public String makeAT(String username, String nickname) {
         return JWT.create()
@@ -40,15 +39,5 @@ public class JwtFactory {
 
     }
 
-    public HttpServletResponse issueTokens(String username, String nickname, HttpServletResponse response) {
-        String accessToken = makeAT(username, nickname);//access token 생성
-        response.addHeader(AT_HEADER, TOKEN_HEADER_PREFIX + accessToken); //응답 헤더에 access token 추가
 
-        String refreshToken = makeRT(username, nickname); //refresh Token 생성
-        response.addHeader(RT_HEADER, TOKEN_HEADER_PREFIX + refreshToken); //응답 헤더에 refresh token 추가
-
-        tokenService.updateRefreshTokens(username, refreshToken);//refresh token member db에 저장
-
-        return response;
-    }
 }
