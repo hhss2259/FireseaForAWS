@@ -4,9 +4,11 @@ import firesea.testserver.domain.basic.JpaBaseTimeEntity;
 import lombok.*;
 import org.springframework.data.domain.Persistable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +28,8 @@ public class Member extends JpaBaseTimeEntity implements Persistable<String> {
 
     String nickname;
 
+
+    @Column(length = 1000)
     String refreshToken;
 
     int cnt;

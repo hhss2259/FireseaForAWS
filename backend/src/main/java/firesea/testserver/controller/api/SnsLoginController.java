@@ -5,6 +5,7 @@ import firesea.testserver.domain.entity.Member;
 import firesea.testserver.jwt.JwtFactory;
 import firesea.testserver.service.MemberService;
 import firesea.testserver.service.TokenService;
+import io.netty.handler.codec.dns.DnsRawRecord;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.weaver.Checker;
@@ -58,15 +59,42 @@ public class SnsLoginController {
             String refreshToken = jwtFactory.makeRT(username, nickname); //refresh Token 생성
             response.addHeader(RT_HEADER, TOKEN_HEADER_PREFIX + refreshToken); //응답 헤더에 refresh token 추가
 
+
+            log.info("sns login access_token = {} ", accessToken);
+            log.info("sns login refresh_token = {} ", refreshToken);
+
+
             tokenService.updateRefreshTokens(username, refreshToken);//refresh token member db에 저장
-            return DefaultRes.res(20032, "로그인 완료 : 회원 인증이 완료되었습니다. ");
+            return DefaultRes.res(20032, "로그인 완료 : 회원 인증이 완료되었습니다. ", nickname);
         }
 
     }
 
+    @PostMapping("/api/oauth2/register")
+    public DefaultRes<String> oauth2_register(@RequestBody SnsRegisteringProfile registeringProfile) {
+
+        String email = registeringProfile.getEmail();
+        String snsId = registeringProfile.getSnsId();
+        String nickname = registeringProfile.getNickname();
+
+        Member member = new Member(snsId+"_"+email, "1111", email, nickname);
+
+        int result = memberService.save(member);
+
+
+        if (result == 1) {
+            return DefaultRes.res(20033, "최초 SNS 로그인을 통한 회원가입 완료", nickname);
+        } else {
+            return DefaultRes.res(40033, "회원가입에 실패했습니다", nickname);
+        }
+    }
+
+
+
     private String makeUsernameForSnsLogin(SnsProfile snsProfile) {
         return snsProfile.getSnsId() + "_" + snsProfile.getEmail();
     }
+
 
     @Data
     @AllArgsConstructor
@@ -76,6 +104,16 @@ public class SnsLoginController {
         String email;
         String name;
     }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    static class SnsRegisteringProfile {
+        String snsId;
+        String email;
+        String nickname;
+    }
+
 
 
 /*

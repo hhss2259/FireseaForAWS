@@ -21,6 +21,9 @@ public class CommentController {
 
     private final CommentService commentService;
 
+    /**
+     * 프론트엔드로부터 comment 를 전송받아 DB에 저장하는 데 사용된다.
+     */
     @PostMapping("/api/user/comment/send")
     public DefaultRes sendComment(HttpServletRequest request, @RequestBody CommentSendingDto dto) {
         String username = (String) request.getAttribute("username");
@@ -32,7 +35,7 @@ public class CommentController {
     }
 
     @Getter
-    static class CommentSendingDto {
+    private static class CommentSendingDto {
         int id;
         String commentBody;
     }
