@@ -45,8 +45,6 @@ button:hover{
 }
 
 
-
-
 .start{
   opacity: 0;
 }
@@ -57,7 +55,8 @@ button:hover{
 
 .toggle-switch {
   width: 80px;
-  right: 35px;
+  left: 300px;
+  top: 18px;
   height: 25px;
   display: block;
   position: fixed;
@@ -119,7 +118,7 @@ button:hover{
   color: white;
 }
 .top-btn p{
-  margin: 12px;
+  margin: 15px 12px 12px 12px;
 }
 .top-btn:hover{
   animation: topBtn 1 0.5s;
@@ -132,6 +131,7 @@ button:hover{
     transform: translateY(-10px);
   }
 }
+
 @media screen and (max-width: 1199px) {
   .banner-l{
     display: none;
@@ -142,13 +142,12 @@ button:hover{
   .detail-container{
     width: 95%;
   }
-  .login-bg{
-    width: 80%;
-    left: 10%;
-    right: 10%;
+  .edit-type{
+    width: 90%;
   }
   .edit-container{
     width: 90%;
+    margin-top: 10%;
   }
   .edit-btn button{
     width: 100%;
@@ -179,9 +178,9 @@ button:hover{
   }
   
   .toggle-switch{
-    margin-left: 120px;
+    left: 75%;
+    top: 70px;
   }
-
 }
 
 @media screen and (max-width: 544px) {
@@ -196,12 +195,9 @@ button:hover{
   .gacha-result p{
     font-size: 12px;
   }
-  .toggle-switch{
-    margin-left: 120px;
-    margin-top: 5px;
-  }
   .top-btn{
     right: 10px;
     bottom: 10px;
   }
 }
+

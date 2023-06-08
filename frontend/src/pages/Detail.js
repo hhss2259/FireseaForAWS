@@ -9,6 +9,7 @@ import useGetTextData from '../hooks/useGetTextData';
 import useDelete from '../hooks/useDeleteDetail';
 import useControlLikes from '../hooks/useControlLikes';
 import usePostComment from '../hooks/usePostComment';
+import useSilentRefresh from '../hooks/useSilentRefresh';
 
 function Detail(){
   const navigate = useNavigate();
@@ -28,7 +29,10 @@ function Detail(){
     commentBody: '',
     id: 0
   })
-
+  const [modifyComment, setModifyComment] = useState({
+    commentId: '',
+    commentBody: ''
+  })
   const [commentList, setCommentList] = useState({
     nickname: '',
     commentBody: ''
@@ -43,6 +47,7 @@ function Detail(){
   const [currentPage, setCurrentPage] = useState(0);
   const [totalCnt, setTotalCnt] = useState(null);
   const isDark = localStorage.getItem('theme')
+  const {silentRefresh} = useSilentRefresh();
   // 글 수정, 삭제 버튼 출력
   const showAdminBtn = ()=>{
     return(
@@ -102,7 +107,8 @@ function Detail(){
     <>
     <Input/>
     <div className={'detail-container start ' + fade}>
-        <h1 className='detail-category'>{category}</h1>
+      <div className={'detail-box box-' + isDark}>
+        <h1 className='detail-category' onClick={()=>navigate(`/list/board/${category}/0`)}>{category}</h1>
         <div className='detail-title'>
             <h3>{textData.textTitle}</h3>
         </div>
@@ -123,22 +129,95 @@ function Detail(){
           <button className='detail-savecomment' onClick={chkComment}>댓글 저장하기</button>
         </div>
 
+        </div>
         <div className='comment-container'>
           {
             totalCnt != null
             ?
             commentList.map((data, i)=>{
               return(
-                <li key={i}><h4>{data.nickname}</h4><p>{data.commentBody}</p></li>
+                <li key={i}>
+                  <div className='comment-l'>
+                  <h4 className='comment-nickname'>{data.nickname}</h4>
+                  {
+                    nickname == data.nickname
+                    &&  <div className='comment-modify'>
+                          <p>{`${data.createdTime.substr(0,10)} ${data.createdTime.substr(11)}`}</p>
+                          <p onClick={(e)=>{
+                            const childrens = e.target.parentNode.parentNode.children
+                            childrens[3].style.display = 'block';
+                            childrens[2].style.display = 'none';
+                          }}>수정</p>
+                          <p onClick={(e)=>{
+                            (async ()=>{
+                              axios.defaults.headers.common['Authorization'] = cookies.token.access_token;
+                              const response = await axios.delete(`http://${ip}/api/user/comment/delete`, {
+                                headers: {"Content-Type": "application/json"},
+                                data: JSON.stringify({commentId: data.commentId})
+                              });
+                              if(response.data.statusCode != 20027){
+                                silentRefresh();
+                              }
+                              else{
+                                alert('삭제되었습니다.')
+                                await getList();
+                              }
+                            })()
+                          }}>삭제</p>
+                        </div>
+                  }
+                  <p className='comment-body'>{data.commentBody}</p>
+                  {
+                    nickname == data.nickname
+                    && <div className='comment-input'>
+                        <textarea className={'comment-textarea textarea-' + isDark} value={data.commentBody} onChange={(e)=>{
+                          const value = e.target.value;
+                          setModifyComment({
+                            ...modifyComment,
+                            ['commentId'] : data.commentId,
+                            ['commentBody'] : value
+                          })
+                          let copy = [...commentList]
+                          copy[i] = {
+                            ...copy[i],
+                            ['commentBody'] : value
+                          }
+                          setCommentList(copy)
+                        }}></textarea>
+                        <button className='comment-cancelmodify' onClick={(e)=>{
+                          const childrens = e.target.parentNode.parentNode.children;
+                          childrens[3].style.display = 'none'
+                          childrens[2].style.display = 'block'
+                        }}>X</button>
+                        <button className='comment-modifybtn' onClick={(e)=>{
+                          const childrens = e.target.parentNode.parentNode.children;
+                          (async ()=>{
+                            axios.defaults.headers.common['Authorization'] = cookies.token.access_token;
+                            const response = await axios.patch(`http://${ip}/api/user/comment/update`, modifyComment);
+                            if(response.data.statusCode != 20026){
+                              silentRefresh();
+                            }
+                            else{
+                              alert('수정되었습니다.')
+                              await getList();
+                            }
+                          })()
+                          childrens[3].style.display = 'none'
+                          childrens[2].style.display = 'block'
+                        }}>수정하기</button>
+                      </div>
+                  }
+                  </div>
+                </li>
               )
             })
             : null
           }
-        </div>
         <button className={'detail-backBtn'} onClick={()=>navigate(-1)}>뒤로가기</button>
         {
           nickname === textData.nickname && showAdminBtn()
         }
+      </div>
     </div>
     </>
     )

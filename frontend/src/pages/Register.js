@@ -3,26 +3,32 @@ import {useSelector} from 'react-redux';
 import axios from 'axios';
 import '../styles/Register.css';
 import useSendUserInfo from '../hooks/useSendUserInfo';
+import { useTheme } from '../theme/useTheme';
 
 function Register(){
   const ip = useSelector((state) => {return state.ip});
   const [fade, setFade] = useState('');
-  const [validList, setValidList] = useState([0,0,0,0])
+  const [validList, setValidList] = useState([0,0,0,0,0])
   const [registerData, setResgisterData] = useState({
     email: '',
     username: '',
     password: '',
     nickname: ''
   });
-
+  let sendEmail = false;
   // 가입 정보 POST하는 hook
   const {sendUserInfo} = useSendUserInfo(registerData);
+  const [emailCode, setEmailCode] = useState('')
+  const [authCode, setAuthCode] = useState('')
+
+  const [themeMode, toggleTheme] = useTheme();
+  const value = localStorage.getItem('theme');
+  const isDark = value == undefined ? themeMode : value;
 
   const onChange = (e)=>{
     const type = e.target.name;
     const value = e.currentTarget.value;
-    const warning = e.currentTarget.nextSibling;
-    console.log(registerData)
+    const warning = e.currentTarget.nextSibling.nextSibling;
     let reg = '';
     let msg = '';
     let cnt = 0;
@@ -60,7 +66,7 @@ function Register(){
       })
     }
   }
-
+  let cnt = 180;
   useEffect(()=>{
     const fadeTimer = setTimeout(()=>setFade('end'), 100);
     return ()=>{
@@ -68,14 +74,78 @@ function Register(){
       setFade('');
     }
   }, [])
-
   return(
   <>
-  <div className={'register-container start ' + fade}>
+  <div className={'register-container start ' + fade + ' register-container-'+isDark}>
     <h1>회원가입</h1>
     <p>이메일</p>
-    <input className='register-email' id='registerEmail' type={'email'} placeholder='example@any.com' onChange={onChange} name='email'/>
-    <p className='valid-fail' id='email-chk'></p>
+    <div className='email-box'>
+      <input className='register-email' id='registerEmail' type={'email'} placeholder='example@any.com' onChange={onChange} name='email'/>
+      <button className='email-chk' onClick={(e)=>{
+        if(validList[4]){
+          alert('이미 인증되었습니다.')
+        }
+        else if(validList[0]){
+          if(sendEmail){
+            alert('이미 이메일을 전송했습니다.')
+          }
+          else{
+            let timer = e.target.parentNode.nextSibling.children[3]
+            let codeBox = e.target.parentNode.nextSibling;
+            sendEmail = true;
+            alert('이메일로 인증코드를 전송했습니다.');
+            console.log(codeBox);
+            codeBox.style.display = 'block';
+            const counter = setInterval(()=>{
+              if(cnt <= 0){
+                timer.innerHTML = '';
+                sendEmail = false;
+                clearInterval(counter);
+              }
+              timer.innerHTML = `${cnt}s`;
+              cnt-=1;
+            }, 1000);
+
+            (async()=>{
+              const response = await axios.get(`http://${ip}/api/checkEmail?email=${registerData.email}`)
+              console.log(response.data)
+              if(response.data.statusCode === 20030){
+                setAuthCode(response.data.data)
+              }
+              else{
+                alert('서버와 소통에 실패함')
+              }
+            })()
+          }
+        }
+        else{
+          alert('이메일 형식이 올바르지 않습니다.')
+        }
+        
+      }}>번호받기</button>
+      <p className='valid-fail' id='email-chk'></p>
+    </div>
+
+    <div className='code-box'>
+      <input className='code-chk' placeholder='인증번호' onChange={(e)=>{setEmailCode(e.target.value)}}/>
+      <button className='codechk-btn' onClick={(e)=>{
+        if(emailCode == authCode){
+          alert('인증되었습니다.');
+          e.target.parentNode.style.display = 'none';
+          let copy = [...validList]
+          copy[4] = 1;
+          setValidList(copy)
+        }
+        else{
+          alert('이메일로 받은 인증번호를 입력하세요.');
+          e.target.nextSibling.innerHTML = '인증번호를 입력하세요';
+          e.target.parentNode.children[0].classList.add('warning');
+        }
+      }}>번호확인</button>
+      <p className='valid-fail' id='code-chk'></p>
+      <p className='email-cnt'></p>
+    </div>
+
     <p>아이디</p>
     <input className='register-id' id='registerId' type={'text'} placeholder='아이디'/>
     <button className='id-chk' onClick={()=>{
@@ -83,13 +153,14 @@ function Register(){
       let username = usernameBox.value;
       let warning = document.querySelector('#id-chk');
       let type = 'username'
-      axios.get(`http://${ip}/api/idCheck?username=${username}`)
+      if(username){
+        axios.get(`http://${ip}/api/idCheck?username=${username}`)
         .then(res=>{
           res = res.data;
           if(res.statusCode === 20003){
             warning.classList.add('valid-success');
             warning.innerHTML = '사용 가능한 아이디입니다.';
-            usernameBox.style.border = '1px solid blue';
+            usernameBox.style.border = '2px solid blue';
             let copy = [...validList]
             copy[1] = 1;
             setValidList(copy)
@@ -111,11 +182,21 @@ function Register(){
             alert('서버가 일을 안해요');
           }
         })
+      }
+      else{
+        alert('닉네임을 입력하세요.');
+        let copy = [...validList]
+        warning.classList.remove('valid-success')
+        usernameBox.style.border = '3px solid red';
+        warning.innerHTML = '아이디를 입력하세요.';
+        copy[1] = 0;
+        setValidList(copy)
+      }
     }}>중복체크</button>
     <p className='valid-fail' id='id-chk'></p>
     <p>비밀번호</p>
     <input className='register-passwd' id='registerPasswd' type={'password'} placeholder='비밀번호' onChange={onChange} name='password'/>
-    <p className='valid-fail' id='passwd-chk'></p>
+    <span></span><p className='valid-fail' id='passwd-chk'></p>
     <p>닉네임</p>
     <input className='register-id' id='registerNickname' type={'text'} placeholder='닉네임'/>
     <button className='nickname-chk' onClick={()=>{
@@ -129,7 +210,7 @@ function Register(){
           if(res.statusCode === 20004){
             warning.classList.add('valid-success');
             warning.innerHTML = '사용 가능한 닉네임입니다.';
-            nicknameBox.style.border = '1px solid blue';
+            nicknameBox.style.border = '2px solid blue';
             let copy = [...validList]
             copy[3] = 1;
             setValidList(copy)
@@ -169,6 +250,9 @@ function Register(){
       }
       else if(!validList[3]){
         alert('닉네임 중복을 확인하세요.');
+      }
+      else if(!validList[4]){
+        alert('이메일 인증이 필요합니다.');
       }
       else{
         setResgisterData({

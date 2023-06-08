@@ -1,10 +1,10 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import {Board} from './pages/Board'
 import {Edit} from './pages/Edit'
 import {Detail} from './pages/Detail'
 import {Register} from './pages/Register'
 import {Login} from './pages/Login';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {Banner} from './components/Banner';
 import { Gacha } from './pages/Gacha';
 import './styles/App.css';
@@ -15,31 +15,37 @@ import { useTheme } from './theme/useTheme';
 import {Mypage} from './pages/Mypage';
 import {Main} from './pages/Main';
 import {Footer} from './components/Footer'
+import GlobalStyles from './components/GlobalStyles';
+import { useEffect, useState, useRef, useDebugValue } from 'react';
+import { changeLoginStatus } from './store';
+import { SNSRegister } from './pages/SNSRegister';
+import {Game} from './pages/Game';
 
 function App() {
   const [themeMode, toggleTheme] = useTheme();
   const theme = themeMode === 'light' ? light : dark;
   const login_status = useSelector((state)=> {return state.loginInfo.login_status});
-  const isDark = localStorage.getItem('theme');
-  
+  const navigate = useNavigate();
   const toggleDarkmode = (e)=>{
     toggleTheme();
     e.currentTarget.classList.toggle('dark');
   }
-  
+  useEffect(()=>{
+    navigate('/')
+  }, [])
   return (
     <>
     <ThemeProvider theme={theme}>
-      <S.Main>
+      <GlobalStyles theme={theme}/>
         <div className="App">
           <div id='pageTop'></div>
+
           {
-            login_status && <Login/>
+            login_status && <div style={{'textAlign':'center'}}><Login/></div>
           }
           <Navbar/>
           {/* <Banner/> */}
-          <div id='wrapper' style={{'textAlign': 'center'}}>
-            
+          <div id='wrapper'>
             <label htmlFor="toggle" className={"toggle-switch "+themeMode} onClick={toggleDarkmode}>
               <h4>{themeMode}</h4>
               <span className="toggle-btn"></span>
@@ -53,16 +59,14 @@ function App() {
               <Route path="/mypage/:nickname/:currentPage" element={<Mypage/>}/>
               <Route path="/gacha" element={<Gacha/>}/>
               <Route path="/register" element={<Register/>}/>
+              <Route path="/sns" element={<SNSRegister/>}/>
+              <Route path="/game" element={<Game/>}/>
               <Route path="*" element={<Error/>}/>
             </Routes>
             <a href='#pageTop' className='top-btn'><p>Top</p></a>
-
             <Footer/>
           </div>
-          
         </div>
-      </S.Main>
-      
     </ThemeProvider></>
   );
 }
@@ -74,13 +78,3 @@ function Error(){
 }
 
 export default App;
-
-const S = {};
-S.Main = styled.div`
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: ${props => props.theme.colors.bgColor};
-  color: ${props => props.theme.colors.titleColor};
-  transition: 0.5s all;
-`;

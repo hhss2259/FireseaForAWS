@@ -5,16 +5,24 @@
   margin-right: auto;
   text-align: left;
 }
-
+.board-box{
+  border: 3px solid lightcoral;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  min-height: 500px;
+}
 /* 게시판 스타일 */
+.board-type{
+  margin: 0 0 10px 10px;
+}
 .board-category{
   width: 100%;
+  margin-top: 0;
   padding-bottom: 5px;
   margin-bottom: 20px;
-  border-bottom: 2px solid rgb(228, 76, 76);
   background-color: rgb(228, 76, 76);
-  border-top-left-radius: 15px;
-  border-top-right-radius: 15px;
+  border-top-left-radius: 17px;
+  border-top-right-radius: 17px;
   color: white;
   padding-left: 20px;
   box-sizing: border-box;
@@ -22,57 +30,80 @@
 }
 th{
   padding-bottom: 10px;
-  border-bottom: solid 1px rgb(228, 76, 76);
+  font-size: 12px;
+  border-bottom: 2px solid rgb(223, 162, 162);
 }
 .board-tr td{
-  border-top: solid 1px rgb(223, 162, 162);
+  border-bottom: solid 1px rgb(223, 162, 162);
 }
-.board-tr:hover{
-  background-color: rgba(0,0,0,0.1);
-  transition: all 0.5s;
+.board-tr:hover {
+  background-color: rgba(85, 85, 85, 0.5);
 }
 
 /* PC버전 게시판 스타일 */
 .board-pc{
   width: 100%;
   text-align: center;
-  border-collapse: separate;
   border-spacing: 0px;
   margin-top: -10px;
 }
 .board-id{
-  width: 5%;
+  width: 100px;
+  min-width: 50px;
   font-size: 12px;
 }
 .board-title{
-  width: 45%;
   text-align: left;
-  overflow: hidden;
   cursor: pointer;
-  padding-left: 10px;
   font-size: 14px;
 }
-.board-nickname, .board-date{
-  width: 15%;
+.board-title-div{
+  width: 98%;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-right: -100vw;
+}
+.th-title, .th-nickname{
+  text-align: left;
+}
+.board-nickname{
+  text-align: left;
+  width: 100px;
   font-size: 12px;
+  padding: 0;
+}
+.board-nickname-div{
+  width: 90%;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-right: -100vw;
 }
 .board-views, .board-likes{
-  width: 10%;
   font-size: 12px;
+  width: 7%;
 }
-
+.board-date{
+  font-size: 12px;
+  width: 16%;
+}
 /* 모바일버전 게시판 스타일 */
 .board-m{
-  width: 100%;
   border-spacing: 0px;
   display: none;
 }
+.board-tr-m:hover {
+  background-color: rgba(85, 85, 85, 0.5);
+}
 .board-title-m{
-  text-align: left;
   width: 100vw;
+  text-align: left;
   cursor: pointer;
   font-size: 12px;
-  border-bottom: 1px solid lightcoral;
+  border-bottom: solid 2px lightcoral;
   padding: 5px;
 }
 .board-title-m p{
@@ -80,6 +111,13 @@ th{
 }
 .p-title{
   font-size: 13px;
+}
+.p-title-div{
+  width: 80vw;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .p-nickname{
   font-size: 11px;
@@ -96,12 +134,7 @@ th{
   font-size: 11px;
   padding: 0 5px;
 }
-.board-tr-m:hover {
-  background-color: rgba(0,0,0,0.1);
-}
-.board-line{
-  border-top: 2px solid rgb(228, 76, 76);
-}
+
 
 /* 홈, 글쓰기, 페이지 버튼 */
 .board-home{
@@ -132,7 +165,13 @@ th{
 @media screen and (max-width: 1199px) {
   .board-container{
     width: 90%;
-    margin-bottom: 0;
+  }
+  .board-type{
+    font-size: 25px;
+    margin-top: 20px;
+  }
+  .board-box{
+    min-width: 100px;
   }
   .board-pc{
     display: none;

@@ -2,6 +2,8 @@
   width: 50%;
   margin: 100px auto;
   padding: 50px;
+  border: 2px solid red;
+  border-radius: 20px;
 }
 .mypage-bg h1{
   text-align: center;
@@ -36,10 +38,6 @@
   height: 20px;
   background-color: rgb(165, 55, 55)
 }
-table{
-  width: 100%;
-  border-spacing: 0;
-}
 .mypage-tr{
   cursor: pointer;
 }
@@ -58,6 +56,7 @@ table{
 }
 .mypage-category{
   width: 15%;
+  font-size: 12px;
 }
 .mypage-date{
   width: 15%;
@@ -66,8 +65,15 @@ table{
   width: 15%;
 }
 
+.mypage-id-m{
+  width: 20%;
+}
 @media screen and (max-width: 1199px) {
   .mypage-bg{
+    width: 90%;
+    padding: 5%;
+  }
+  .mypage-board{
     width: 100%;
   }
   .mypage-date{

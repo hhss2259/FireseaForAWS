@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { changeLoginStatus } from '../store';
 import '../styles/Login.css';
@@ -15,11 +15,10 @@ function Login(){
   })
   const localSettingTheme = localStorage.getItem('theme');
   const {username, password} = loginData;
-
-
+  const params = useParams();
   // 로그인 정보 POST하는 hook
   const {sendUserInfo} = useSendUserInfo(loginData);
-  
+
   
   // 각 input에서 username, password 저장
   const onChange = (e)=>{
@@ -42,15 +41,18 @@ function Login(){
 
   useEffect(()=>{
     const fadeTimer = setTimeout(()=>setFade('end'), 100);
+    document.body.style.overflow = 'hidden';
     return ()=>{
       clearTimeout(fadeTimer);
       setFade('');
+      document.body.style.overflowY = 'scroll';
     }
   }, [])
 
   return(
     <>
-      <div className={'login-bg start ' + fade + ' '+localSettingTheme}>
+    <div className={'login-layout start ' + fade}>
+      <div className={'login-bg ' + localSettingTheme}>
         <div className='login-logo'>
           <h1>Fire Sea</h1>
         </div>
@@ -71,6 +73,7 @@ function Login(){
           <button className='login-registerBtn' onClick={()=>{navigate('/register'); dispatch(changeLoginStatus(false));}}>회원가입 하기</button>
           <button className='login-cancelBtn' onClick={()=>{dispatch(changeLoginStatus(false))}}>닫기</button>
         </div>
+      </div>
       </div>
     </>
   )

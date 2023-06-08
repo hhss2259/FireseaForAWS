@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import '../styles/Navbar.css'
 import { useState } from 'react';
 import { useTheme } from '../theme/useTheme';
+import { NaverLogin } from './NaverLogin';
 
 function Navbar(){
   let navigate = useNavigate();
@@ -74,6 +75,9 @@ function Navbar(){
           <ul className='navbar-logo' onClick={()=>navigate('/')}><h1>Fire Sea</h1></ul>
         </div>
         <div className='navbar-right'>
+          {
+            nickname ? null : <div style={{'margin':'15px'}}><NaverLogin/></div>
+          }
           <p className='navbar-icon'><FontAwesomeIcon icon={faUser} className='fa-2x' onClick={goMypage}/></p>
           <div className='login-box'>
             <p className='login-nickname'>{nickname ? nickname : `로그인하세요`}</p>
@@ -85,12 +89,20 @@ function Navbar(){
         <div className='sidebar-box'>
           <ul className='sidebar-title'>
             <h3>게시판</h3>
-            <ul onClick={()=>navigate('/list/board/front/0')}><p>Front 게시판</p></ul>
-            <ul onClick={()=>navigate('/list/board/server/0')}><p>Server 게시판</p></ul>
+            <ul onClick={()=>{
+              navigate('/list/board/front/0')
+              dispatch(changeMenuStatus(false));
+              setIconState(false);
+      }}><p>Front 게시판</p></ul>
+            <ul onClick={()=>{navigate('/list/board/server/0')
+          dispatch(changeMenuStatus(false));
+          setIconState(false);}}><p>Server 게시판</p></ul>
           </ul>
           <ul className='sidebar-title'>
             <h3>게임하기</h3>
-            <ul><p>게임1</p></ul>
+            <ul onClick={()=>{navigate('/gacha')
+          dispatch(changeMenuStatus(false));
+          setIconState(false);}}><p>게임1</p></ul>
             <ul><p>게임2</p></ul>
           </ul>
         </div>
