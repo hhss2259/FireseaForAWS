@@ -98,7 +98,7 @@ public class EmailService {
     public void checkDuplicateEmail(String email) {
         Member member = memberRepository.findMemberByEmail(email);
 
-        if (member == null) {
+        if (member != null) {
             throw new DuplicateEmailException();
         }
     }

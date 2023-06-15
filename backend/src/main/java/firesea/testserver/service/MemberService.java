@@ -5,6 +5,7 @@ import firesea.testserver.error.DuplicateNickname;
 import firesea.testserver.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,7 @@ import java.util.Optional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public int countMemberByUsername(String username) {
       return  memberRepository.countMemberByUsername(username);
@@ -48,7 +50,7 @@ public class MemberService {
         }
 
         log.info("member.getPassword={}, savedMember.getPassword = {}", member.getPassword(), savedMember.getPassword());
-        if (member.getPassword().equals(savedMember.getPassword())) {
+        if (passwordEncoder.matches(member.getPassword(), savedMember.getPassword())) {
 
             String username = savedMember.getUsername();
             String nickname = savedMember.getNickname();

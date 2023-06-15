@@ -4,7 +4,7 @@ let ip = createSlice({
     name: 'ip',
     // initialState: 'firesea.o-r.kr:8080',
     // initialState: '172.30.1.46:8080'
-    initialState: '192.168.0.7:8080'
+    initialState: '172.30.1.37'
 })
 let loginInfo = createSlice({
     name: 'loginInfo',

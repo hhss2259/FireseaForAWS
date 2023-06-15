@@ -21,7 +21,6 @@ import static firesea.testserver.jwt.JwtConstants.*;
 @RequiredArgsConstructor
 public class JwtAuthorizationInterceptor implements HandlerInterceptor {
 
-
     private final MemberService memberService;
 
     @Override

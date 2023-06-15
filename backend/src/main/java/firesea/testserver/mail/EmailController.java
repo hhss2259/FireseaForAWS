@@ -17,6 +17,7 @@ public class EmailController {
     @GetMapping("/api/checkEmail")
     public DefaultRes<String> checkEmail(@RequestParam String email) throws Exception {
 
+        log.info("hiashfasdihfs");
         log.info("accept email = {} ", email);
         emailService.checkDuplicateEmail(email);
         String key = emailService.sendMessage(email);

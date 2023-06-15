@@ -16,7 +16,6 @@ import static firesea.testserver.jwt.JwtConstants.*;
 @RequiredArgsConstructor
 public class JwtFactory {
 
-
     public String makeAT(String username, String nickname) {
         return JWT.create()
                 .withSubject("access token")
@@ -27,7 +26,6 @@ public class JwtFactory {
                 .sign(Algorithm.HMAC256(JWT_SECRET_AT));
 
     }
-
     public String makeRT(String username, String nickname) {
         return JWT.create()
                 .withSubject("access token")
@@ -36,8 +34,5 @@ public class JwtFactory {
                 .withClaim("username", username)
                 .withClaim("nickname",nickname)
                 .sign(Algorithm.HMAC256(JWT_SECRET_RT));
-
     }
-
-
 }

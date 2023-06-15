@@ -70,10 +70,8 @@ public class TokenService {
 
         return result;
     }
-
     @Transactional
     public void updateRefreshTokens(String username, String refreshToken) {
-
         Member member = memberRepository.findMemberByUsername(username);
         member.updateRefreshToken(refreshToken); //변경감지
     }

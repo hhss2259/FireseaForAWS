@@ -7,6 +7,8 @@ import firesea.testserver.service.MemberService;
 import firesea.testserver.service.TokenService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
@@ -26,14 +28,16 @@ public class MemberInfoController {
     private final MemberService memberService;
     private final TokenService tokenService;
     private final JwtFactory jwtFactory;
+    private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/api/register")
     public DefaultRes register(@RequestBody Member member) {
         log.info("member.username = {}, member.email={}, member.password={}",
-                member.getUsername(), member.getEmail(), member.getPassword());
+                member.getUsername(), member.getEmail(), passwordEncoder.encode(member.getPassword()));
 
         DefaultRes defaultRes;
-        int result = memberService.save(member);
+        String encodedPw = passwordEncoder.encode(member.getPassword());
+        int result = memberService.save(new Member(member.getUsername(), encodedPw, member.getEmail(), member.getNickname()));
         if (result == 1) {
             defaultRes = DefaultRes.res(20001, "회원가입이 완료되었습니다");
             log.info("회원가입 완료");
@@ -46,9 +50,6 @@ public class MemberInfoController {
 
     @PostMapping("/api/login")
     public DefaultRes login(@RequestBody Member member, HttpServletResponse response) {
-        log.info("member.username = {}, member.email={}, member.password={}",
-                member.getUsername(), member.getEmail(), member.getPassword());
-
         Optional<Map> optionalMap = memberService.login(member);
 
         if (optionalMap.isEmpty()) {
@@ -66,18 +67,6 @@ public class MemberInfoController {
         response.addHeader(RT_HEADER, TOKEN_HEADER_PREFIX + refreshToken); //응답 헤더에 refresh token 추가
 
         tokenService.updateRefreshTokens(username, refreshToken);//refresh token member db에 저장
-
-
-
-
-//        // cookie에 한 번 담아보자
-//        Cookie cookie = new Cookie("refresh_token", refreshToken);
-//        cookie.setMaxAge(7 * 24 * 60 * 60);
-//
-////        cookie.setSecure(true);
-////        cookie.setHttpOnly(true);
-//        cookie.setPath("/");
-//        response.addCookie(cookie);
 
 
         DefaultRes defaultRes = DefaultRes.res(20002, "로그인 성공", nickname);
