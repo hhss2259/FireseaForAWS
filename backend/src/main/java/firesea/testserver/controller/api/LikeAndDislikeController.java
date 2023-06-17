@@ -2,6 +2,8 @@ package firesea.testserver.controller.api;
 
 import firesea.testserver.domain.basic.DefaultRes;
 import firesea.testserver.service.LikeAndDislikeService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,12 +17,14 @@ import java.net.UnknownHostException;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
+@Api(value="본문의 '좋아요 싫어요' 기능 관리")
 public class LikeAndDislikeController {
 
     private final LikeAndDislikeService likeAndDislikeService;
 
     //좋아요 싫어요
     @GetMapping("/api/likeTm")
+    @ApiOperation(value="'좋아요' 1회 증가")
     public DefaultRes likeTm(@RequestParam int id, HttpServletRequest request) throws UnknownHostException {
         //요청 ip 가져오기
         String ip = getClientIp(request);
