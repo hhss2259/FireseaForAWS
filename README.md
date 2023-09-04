@@ -6,7 +6,7 @@
 
 **프로젝트 상세히 보기**
 
-[https://glacier-talon-25b.notion.site/Firesea-Project-6c2c25779e5149ef9a0f2b0338b3d802?pvs=4](https://www.notion.so/Firesea-Project-6c2c25779e5149ef9a0f2b0338b3d802?pvs=21)
+https://velog.io/@hhss2259/series/Firesea-Project
 
 **GitHub 주소**
 
